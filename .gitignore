@@ -1,0 +1,29 @@
+# Environment variables
+.env.local
+.env
+
+# Twitter cookies (SENSITIVE!)
+twitter-cookies.json
+
+# Bot profile data
+bot-profile-clean/
+chrome-bot-profile/
+chrome-profile-copy/
+my-twitter-profile/
+
+# Storage files
+commented-posts.json
+bot-log.json
+
+# Node modules
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

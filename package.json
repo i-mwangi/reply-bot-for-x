@@ -1,0 +1,39 @@
+{
+  "name": "replyx",
+  "version": "1.0.0",
+  "description": "AI-Powered Twitter Engagement Automation",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "history": "node scripts/view-history.js"
+  },
+  "keywords": [
+    "twitter",
+    "automation",
+    "ai",
+    "engagement",
+    "bot",
+    "replicate",
+    "ultracontext"
+  ],
+  "author": "ReplyX",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/justin55afdfdsf5ds45f4ds5f45ds4/ReplyX.git"
+  },
+  "dependencies": {
+    "chromedriver": "^133.0.0",
+    "dotenv": "^16.4.5",
+    "openai": "^4.77.0",
+    "puppeteer": "^24.36.1",
+    "puppeteer-core": "^24.36.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "replicate": "^0.34.1",
+    "selenium-webdriver": "^4.27.0",
+    "ultracontext": "^0.1.3"
+  }
+}
