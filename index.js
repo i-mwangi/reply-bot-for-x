@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ReplyX - AI-Powered Twitter Engagement Bot
+ * Vibey - AI-Powered Twitter Engagement Bot
  * 
  * Main entry point for the bot
  */

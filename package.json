@@ -1,5 +1,5 @@
 {
-  "name": "replyx",
+  "name": "vibey",
   "version": "1.0.0",
   "description": "AI-Powered Twitter Engagement Automation",
   "main": "index.js",
@@ -18,11 +18,11 @@
     "replicate",
     "ultracontext"
   ],
-  "author": "ReplyX",
+  "author": "Vibey",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/justin55afdfdsf5ds45f4ds5f45ds4/ReplyX.git"
+    "url": "https://github.com/i-mwangi/reply-bot-for-x.git"
   },
   "dependencies": {
     "chromedriver": "^133.0.0",

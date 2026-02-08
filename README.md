@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="tmp0rw_iho1.jpg" alt="ReplyX Logo" width="200"/>
+  <img src="tmp0rw_iho1.jpg" alt="Vibey Logo" width="200"/>
   
-  # ReplyX
+  # Vibey
   
   ### AI-Powered Twitter Engagement Automation
   
@@ -17,7 +17,7 @@
 
 ## 🚀 Overview
 
-ReplyX is an intelligent Twitter automation bot that generates high-quality, contextually relevant replies to tweets in your target niche. Unlike traditional bots, ReplyX uses advanced AI to analyze posts, understand context, and craft authentic responses that add value to conversations.
+Vibey is an intelligent Twitter automation bot that generates high-quality, contextually relevant replies to tweets in your target niche. Unlike traditional bots, Vibey uses advanced AI to analyze posts, understand context, and craft authentic responses that add value to conversations.
 
 **Key Features:**
 - 🧠 **AI-Powered Analysis** - Uses Llama 3 to understand tweet context and sentiment
@@ -99,8 +99,8 @@ With UltraContext, you can:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/justin55afdfdsf5ds45f4ds5f45ds4/ReplyX.git
-   cd replyx
+   git clone https://github.com/i-mwangi/reply-bot-for-x.git
+   cd reply-bot-for-x
    ```
 
 2. **Install dependencies**
@@ -344,9 +344,9 @@ This tool is for educational and research purposes. Users are responsible for co
 
 ## 📧 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/replyx/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/replyx/discussions)
-- **Email**: justinlord@empusaai.com
+- **Issues**: [GitHub Issues](https://github.com/i-mwangi/reply-bot-for-x/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/i-mwangi/reply-bot-for-x/discussions)
+- **Email**: mwangihenry336@gmail.com
 
 ---
 
@@ -354,6 +354,6 @@ This tool is for educational and research purposes. Users are responsible for co
   
   **Built with ❤️ for authentic Twitter engagement**
   
-  [⭐ Star this repo](https://github.com/yourusername/replyx) if you find it useful!
+  [⭐ Star this repo](https://github.com/i-mwangi/reply-bot-for-x) if you find it useful!
   
 </div>
