@@ -12,6 +12,8 @@ class TwitterBot {
     this.logger = new UltraContextLogger();
     this.browser = null;
     this.page = null;
+    this.lastRefreshTime = Date.now();
+    this.refreshInterval = 10 * 60 * 1000; // Refresh every 10 minutes
   }
 
   async init() {
@@ -32,18 +34,25 @@ class TwitterBot {
         '--disable-setuid-sandbox',
         '--disable-blink-features=AutomationControlled',
         '--disable-features=IsolateOrigins,site-per-process',
-        '--start-maximized'
+        '--start-maximized',
+        '--disable-web-security',
+        '--disable-features=VizDisplayCompositor'
       ],
       ignoreDefaultArgs: ['--enable-automation'],
-      defaultViewport: null
+      defaultViewport: null,
+      protocolTimeout: 180000
     });
 
     const pages = await this.browser.pages();
     this.page = pages[0] || await this.browser.newPage();
     
+    // Set longer default timeout
+    this.page.setDefaultNavigationTimeout(120000);
+    this.page.setDefaultTimeout(120000);
+    
     // Go to Twitter first to set cookies
     console.log('🍪 Loading your Twitter cookies...');
-    await this.page.goto('https://twitter.com', { waitUntil: 'domcontentloaded' });
+    await this.page.goto('https://twitter.com', { waitUntil: 'domcontentloaded', timeout: 120000 });
     
     try {
       const cookies = JSON.parse(readFileSync('./twitter-cookies.json', 'utf8'));
@@ -106,7 +115,11 @@ class TwitterBot {
     const url = `https://twitter.com/search?q=${encodeURIComponent(searchQuery)}&src=typed_query&f=live`;
     
     console.log('🔍 Navigating to Twitter search...');
-    await this.page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+    try {
+      await this.page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
+    } catch (error) {
+      console.log('⚠️  Navigation timeout, but page might have loaded. Continuing...');
+    }
     await new Promise(resolve => setTimeout(resolve, 5000));
     
     // Check if logged in by looking for the compose tweet button or profile
@@ -243,6 +256,16 @@ class TwitterBot {
 
     while (Storage.getTodayCount() < config.maxCommentsPerDay) {
       try {
+        // Check if it's time to refresh the page for fresh content
+        const timeSinceRefresh = Date.now() - this.lastRefreshTime;
+        if (timeSinceRefresh > this.refreshInterval) {
+          console.log('🔄 Refreshing page for fresh content...');
+          await this.page.reload({ waitUntil: 'domcontentloaded', timeout: 120000 });
+          await new Promise(resolve => setTimeout(resolve, 5000));
+          this.lastRefreshTime = Date.now();
+          console.log('✅ Page refreshed!');
+        }
+
         console.log(`\n📍 Looking for posts... (${Storage.getTodayCount()}/${config.maxCommentsPerDay})`);
         
         const posts = await this.findPosts();
