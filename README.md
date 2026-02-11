@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="tmp0rw_iho1.jpg" alt="Vibey Logo" width="200"/>
+  <img src="public/logo 1.png" alt="Vibey Logo" width="200"/>
   
   # Vibey
   
