@@ -15,6 +15,10 @@ my-twitter-profile/
 commented-posts.json
 bot-log.json
 
+# Test files
+test-*.js
+*-test.js
+
 # Node modules
 node_modules/
 
