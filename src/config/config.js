@@ -18,8 +18,8 @@ export const config = {
   maxCommentsPerDay: 100,
   
   // Timing (milliseconds)
-  minWaitBetweenComments: 5 * 60 * 1000, // 5 minutes
-  maxWaitBetweenComments: 15 * 60 * 1000, // 15 minutes
+  minWaitBetweenComments: 2 * 60 * 1000, // 2 minutes
+  maxWaitBetweenComments: 3 * 60 * 1000, // 3 minutes
   typingDelayMin: 50,
   typingDelayMax: 150,
   
