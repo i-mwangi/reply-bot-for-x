@@ -5,74 +5,99 @@ import { config } from '../config/config.js';
 export class AIHandler {
   constructor() {
     this.replicate = new Replicate({ auth: config.replicateKey });
-    this.openai = config.openaiKey ? new OpenAI({ apiKey: config.openaiKey }) : null;
+    this.openai = config.openaiKey ? new OpenAI({ 
+      apiKey: config.openaiKey,
+      baseURL: 'https://openrouter.ai/api/v1',
+      defaultHeaders: {
+        'HTTP-Referer': 'https://github.com/i-mwangi/reply-bot-for-x',
+        'X-Title': 'Vibey'
+      }
+    }) : null;
   }
 
   async analyzePost(screenshotBase64, postText) {
     try {
-      // Use Replicate's FREE meta/llama model for analysis
-      const output = await this.replicate.run(
-        "meta/meta-llama-3-8b-instruct",
-        {
-          input: {
-            prompt: `Analyze this tweet: "${postText}"\n\nIs this about leadership, business, startups, or controversial topics? Is it engaging enough to comment on? Reply ONLY with JSON: {"worth_commenting": true/false, "topic": "brief topic", "vibe": "professional/casual/controversial"}`,
-            max_tokens: 200,
-            temperature: 0.7
-          }
-        }
-      );
+      // Use OpenRouter for analysis with reasoning enabled
+      if (this.openai) {
+        const response = await this.openai.chat.completions.create({
+          model: 'nousresearch/hermes-3-llama-3.1-405b:free',
+          messages: [
+            {
+              role: 'user',
+              content: `Analyze this tweet: "${postText}"\n\nIs this about leadership, business, startups, or controversial topics? Is it engaging enough to comment on? Reply ONLY with JSON: {"worth_commenting": true/false, "topic": "brief topic", "vibe": "professional/casual/controversial"}`
+            }
+          ],
+          max_tokens: 200,
+          temperature: 0.7
+        });
 
-      const response = Array.isArray(output) ? output.join('') : output;
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      
-      if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]);
+        const content = response.choices[0].message.content;
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        
+        if (jsonMatch) {
+          return JSON.parse(jsonMatch[0]);
+        }
       }
       
       return { worth_commenting: false, topic: 'unknown', vibe: 'neutral' };
     } catch (error) {
-      console.error('❌ Replicate analysis error:', error.message);
+      console.error('❌ AI analysis error:', error.message);
       return { worth_commenting: false, topic: 'error', vibe: 'neutral' };
     }
   }
 
   async generateReply(postText, analysis) {
     try {
-      // Use FREE Llama model for reply generation
-      const systemPrompt = `You are a thought leader commenting on Twitter/X. Your goal is to provide valuable, punchy insights that could go viral.
+      // Use OpenRouter for reply generation
+      if (this.openai) {
+        const systemPrompt = `You write Twitter replies like a real person on Reddit. Be direct, cut the fluff, speak in plain facts.
 
-Style guidelines:
-- Be helpful and insightful
+RULES:
+- NO em dashes (—)
+- NO rhetoric stacking ("not just X, but Y")
+- NO additive framing ("more than", "beyond")
+- NO filler words: "actually", "notably", "essentially", "fundamentally", "truly"
+- NO fancy/official language
+- Use radical brevity - cut everything unnecessary
+- Short, heavy words
+- Sound like giving a straight answer, not a sales pitch
 - Match the vibe: ${analysis.vibe}
-- Keep it under 280 characters
+- Keep under 280 characters
 - No hashtags unless natural
 - No emojis unless it fits
-- Sound human, not like AI
-- Be slightly controversial if appropriate
-- Add value, don't just agree
 
 Topic: ${analysis.topic}
 
-Generate a viral-worthy reply to this tweet:
-"${postText}"
+WRONG: "Hedera doesn't care about the hype. It's built to actually stay standing when the pressure is on."
+RIGHT: "Hedera is strong. It just keeps running when others break."
 
-Reply with ONLY the comment text, nothing else.`;
+Reply to: "${postText}"
 
-      const output = await this.replicate.run(
-        "meta/meta-llama-3-8b-instruct",
-        {
-          input: {
-            prompt: systemPrompt,
-            max_tokens: 100,
-            temperature: 0.9
-          }
-        }
-      );
+Write ONLY the comment, nothing else.`;
 
-      const reply = Array.isArray(output) ? output.join('').trim() : output.trim();
+        const response = await this.openai.chat.completions.create({
+          model: 'nousresearch/hermes-3-llama-3.1-405b:free',
+          messages: [
+            {
+              role: 'system',
+              content: systemPrompt
+            },
+            {
+              role: 'user',
+              content: postText
+            }
+          ],
+          max_tokens: 100,
+          temperature: 0.9
+        });
+
+        const reply = response.choices[0].message.content.trim();
+        
+        // Clean up the reply and remove em dashes
+        return reply.replace(/^["']|["']$/g, '').replace(/—/g, '-').substring(0, 280);
+      }
       
-      // Clean up the reply
-      return reply.replace(/^["']|["']$/g, '').substring(0, 280);
+      return null;
     } catch (error) {
       console.error('❌ Reply generation error:', error.message);
       return null;
